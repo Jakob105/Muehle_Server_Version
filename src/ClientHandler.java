@@ -16,9 +16,6 @@ public class ClientHandler implements Runnable {
     public String getPlayerName() {
         return playerName;
     }
-    public boolean isPlayerColour() {
-        return playerColour;
-    }
     public void setPlayerColour(boolean playerColour) {
         this.playerColour = playerColour;}
     public void setOpponent(ClientHandler opponent) {
@@ -109,6 +106,7 @@ public class ClientHandler implements Runnable {
         }
         String nameRequest = input.readLine();
         playerName = nameRequest;
+        gameHandler.setPlayerName(playerName);
         signedIn = true;
         output.println("Welcome to the game, "+getPlayerName()+"!\n" +
                 "\nENTER 'quit' TO LEAVE THE GAME OR SEND A MESSAGE TO YOUR OPPONENT.\n");

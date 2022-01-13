@@ -11,8 +11,11 @@ public class GameHandler implements Runnable {
     private PrintWriter output;
     private boolean playerColour;
     private Frame frame;
+    private String playerName;
     private GameHandler opponent;
 
+    public String getPlayerName() {return playerName;}
+    public void setPlayerName(String playerName) {this.playerName = playerName;}
     public void setOpponent(GameHandler opponent) {
         this.opponent = opponent;
     }
@@ -50,6 +53,6 @@ public class GameHandler implements Runnable {
 
     @Override
     public void run() {
-        frame = new Frame(playerColour, opponent);
+        frame = new Frame(playerColour, opponent, playerName);
     }
 }

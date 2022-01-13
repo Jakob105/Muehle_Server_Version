@@ -21,7 +21,10 @@ public class Frame extends JFrame{
     private List<Feld> blackStonesOutOfGame;
     private Feld[][] fields = new Feld[3][8];
     private GameHandler opponent;
+    private String playerName;
 
+    private JPanel displayPlayerName;
+    private JLabel displayPlayerNameLabel;
     private JPanel displayPlayerColour;
     private JLabel blackMoveLabel;
     private JLabel whiteMoveLabel;
@@ -93,13 +96,14 @@ public class Frame extends JFrame{
     public Frame(){
 
     }
-    public Frame(boolean colour, GameHandler opponent){
+    public Frame(boolean colour, GameHandler opponent, String playerName){
 
         this.setTitle("Mühle");
         this.setLayout(null);
         this.setSize(800,875);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.playerName = playerName;
         playerColour = true;
         gameOver = false;
         amountOfUnusedWhiteStones = 9;
@@ -121,6 +125,7 @@ public class Frame extends JFrame{
         }
         this.opponent = opponent;
         changePlayer = false;
+
         blackMoveLabel = new JLabel("black moves");
         blackMoveLabel.setVerticalAlignment(JLabel.CENTER);
         blackMoveLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -159,6 +164,14 @@ public class Frame extends JFrame{
             displayPlayerColour.add(displayBlackPlayer,BorderLayout.CENTER);
         }
         this.add(displayPlayerColour);
+
+        displayPlayerNameLabel = new JLabel("Player: "+playerName);
+        displayPlayerName = new JPanel();
+        displayPlayerName.setBackground(Color.white);
+        displayPlayerName.setBounds(50,775,200,50);
+        displayPlayerName.setLayout(new BorderLayout());
+        displayPlayerName.add(displayPlayerNameLabel);
+        this.add(displayPlayerName);
 
         largeHorizontalLine1 = new JPanel();
         largeHorizontalLine1.setBackground(Color.black);
@@ -511,6 +524,10 @@ public class Frame extends JFrame{
 
     public void setaMillWasCreatedInThePreviousAction(boolean aMillWasCreatedInThePreviousAction) {
         this.aMillWasCreatedInThePreviousAction = aMillWasCreatedInThePreviousAction;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public int getAmountOfUnusedWhiteStones() {
