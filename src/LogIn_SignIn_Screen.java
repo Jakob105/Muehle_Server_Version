@@ -16,13 +16,14 @@ public class LogIn_SignIn_Screen extends JFrame{
     //Database Connection
     private Connection connection;
     private Statement statement;
-    private ResultSet resultSet;
 
     //JLabels
     private JLabel usernameLabel;
     private JLabel passwordLabel1;
     private JLabel passwordLabel2;
     private JLabel notYetSignedIn;
+    //warnings
+    private JLabel nameOrPasswordNull;
 
     //JTextFields
     private JTextField usernameTextField;
@@ -47,10 +48,6 @@ public class LogIn_SignIn_Screen extends JFrame{
 
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/registered_users","jakob","vnSRCiÜfSxGF=7=Kp(W_ÖjO)6NÖ~A3");
         statement = connection.createStatement();
-        resultSet = statement.executeQuery("select * from login_data");
-        while(resultSet.next()){
-            System.out.println(resultSet.getString("user_name"));
-        }
 
         this.setTitle("Login");
         this.setSize(600,600);
@@ -62,9 +59,13 @@ public class LogIn_SignIn_Screen extends JFrame{
         passwordLabel1 = new JLabel("Password");
         passwordLabel1.setBounds(80,120,200,30);
         passwordLabel2 = new JLabel("Confirm Password");
-        passwordLabel2.setBounds(80,230,200,30);
+        passwordLabel2.setBounds(80,170,200,30);
         notYetSignedIn = new JLabel("Not yet registrated?");
         notYetSignedIn.setBounds(80,220,200,30);
+        nameOrPasswordNull = new JLabel("UserName or password is empty.");
+        nameOrPasswordNull.setBounds(250,40,400,30);
+        nameOrPasswordNull.setForeground(Color.red);
+
 
 
         //TextFields
@@ -73,7 +74,7 @@ public class LogIn_SignIn_Screen extends JFrame{
         passwordField1 = new JPasswordField();
         passwordField1.setBounds(250,120,200,30);
         passwordField2 = new JPasswordField();
-        passwordField2.setBounds(250,230,200,30);
+        passwordField2.setBounds(250,170,200,30);
 
         //JButtons
         loginButton = new JButton("Login");
@@ -83,6 +84,13 @@ public class LogIn_SignIn_Screen extends JFrame{
 
         registrateButton = new JButton("Register");
         registrateButton.setBounds(250,220,100,30);
+        registrateMouseListener = new RegistrateMouseListener(this);
+        registrateButton.addMouseListener(registrateMouseListener);
+
+        backButton = new JButton("Back");
+        backButton.setBounds(250,300,100,30);
+        goBackMouseListener = new GOBackMouseListener(this);
+        backButton.addMouseListener(goBackMouseListener);
 
         backButton = new JButton("Back");
 
@@ -90,10 +98,37 @@ public class LogIn_SignIn_Screen extends JFrame{
         this.add(passwordLabel1);
         this.add(usernameTextField);
         this.add(passwordField1);
+        //this.add(passwordField2);
+        //this.add(passwordLabel2);
         this.add(notYetSignedIn);
         this.add(loginButton);
         this.add(registrateButton);
+        this.add(backButton);
         this.setVisible(true);
 
+    }
+
+    public Statement getStatement() {
+        return statement;
+    }
+
+    public static ArrayList<ClientHandler> getActivePlayers() {
+        return activePlayers;
+    }
+
+    public JTextField getUsernameTextField() {
+        return usernameTextField;
+    }
+
+    public JPasswordField getPasswordField1() {
+        return passwordField1;
+    }
+
+    public JPasswordField getPasswordField2() {
+        return passwordField2;
+    }
+
+    public JLabel getNameOrPasswordNull() {
+        return nameOrPasswordNull;
     }
 }
