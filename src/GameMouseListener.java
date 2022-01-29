@@ -1,12 +1,13 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MyMouseListener implements MouseListener {
+public class GameMouseListener implements MouseListener {
 
     private Frame frame;
     private Feld field;
 
-    public MyMouseListener(Frame frame, Feld field) {
+
+    public GameMouseListener(Frame frame, Feld field) {
         this.frame = frame;
         this.field = field;
     }
