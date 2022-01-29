@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Frame extends JFrame{
     private boolean playerColour;
@@ -471,8 +474,56 @@ public class Frame extends JFrame{
         fields[2][7].setIndex(24);
         this.add(fields[2][7]);
 
+
+        JLabel TimerLabelWhite = new JLabel();
+        JLabel TimerLabelBlack = new JLabel();
+        TimerLabelWhite.setBounds(200,1,200,50);
+        TimerLabelBlack.setBounds(450,1,200,50);
+        this.add(TimerLabelWhite);
+        this.add(TimerLabelBlack);
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int i = 120;
+            int j = 120;
+
+            public void run() {
+                if (colour) {
+                    if (itsYourTurn) {
+                        TimerLabelWhite.setText("White Player Time left: " + i);
+                        i--;
+                        TimerLabelBlack.setText(" Black Player Time left: " + j);
+
+
+                    } else {
+                        TimerLabelWhite.setText(" White Player Time left: " + i);
+                        TimerLabelBlack.setText("Black Player Time left: " + j);
+                        j--;
+                    }
+                }else{
+                    if (itsYourTurn) {
+                        TimerLabelBlack.setText(" Black Player Time left: " + j);
+                        j--;
+                        TimerLabelWhite.setText(" White Player Time left: " + i);
+
+
+                    } else {
+                        TimerLabelWhite.setText("White Player Time left: " + i);
+                        TimerLabelBlack.setText("Black Player Time left: " + j);
+                        i--;
+                    }
+                }
+                if(i<0 || j<0){
+                    isGameOver();
+                }
+
+            }
+        }, 0, 1000);
+
+
         this.setVisible(true);
     }
+
 
     public List<Feld> getWhiteStonesOnBoard() {
         return whiteStonesOnBoard;
