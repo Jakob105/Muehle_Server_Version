@@ -126,7 +126,6 @@ public class LogIn_SignIn_Screen extends JFrame{
         this.add(passwordLabel2);
         this.add(notYetSignedIn);
         this.add(loginButton);
-        this.add(loginButton);
         this.add(registrateButton);
         //this.add(logoutButton);
         this.add(backButton);
