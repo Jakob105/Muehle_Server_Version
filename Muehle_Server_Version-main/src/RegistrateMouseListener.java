@@ -28,14 +28,14 @@ public class RegistrateMouseListener implements MouseListener {
                 logIn_signIn_screen.getPasswordField2().setVisible(false);
                 logIn_signIn_screen.getPasswordLabel2().setVisible(false);
                 logIn_signIn_screen.NotYetRegistrated().setVisible(true);
-                logIn_signIn_screen.getPasswordField2().setText(null);
-                logIn_signIn_screen.getPasswordField1().setText(null);
-                logIn_signIn_screen.getUsernameTextField().setText(null);
+                //logIn_signIn_screen.getPasswordField2().setText(null);
+                //logIn_signIn_screen.getPasswordField1().setText(null);
+                //logIn_signIn_screen.getUsernameTextField().setText(null);
                 logIn_signIn_screen.repaint();
 
                 try {
                     System.out.println(logIn_signIn_screen.usernameinput());
-                    String sql = "INSERT INTO registration_table VALUES('" +logIn_signIn_screen.usernameinput()+ "','" +logIn_signIn_screen.getPasswordField1input()+ "'," + 0 + ")";
+                    String sql = "INSERT INTO login_data VALUES('" +logIn_signIn_screen.getUsernameTextField().getText()+ "','" +logIn_signIn_screen.getPasswordField1input()+ "'," + 0 + ")";
 
                     logIn_signIn_screen.getStatement().executeUpdate(sql);
                 } catch (SQLException throwables) {

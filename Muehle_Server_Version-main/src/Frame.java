@@ -36,14 +36,8 @@ public class Frame extends JFrame{
     private JLabel whiteWins;
     private JPanel panel;
 
-    //creating panels that display name of players
-    private JButton button;
-    private JTextField textField;
-    private JPanel yourNamePanel;
-    private JLabel enterAName;
-    private JLabel yourNameLabel;
-    private JPanel opponentsNamePanel;
-    private JLabel opponentsNameLabel;
+    private JLabel nameOfPlayer;
+    private JLabel nameOfOpponent;
 
     private JPanel largeHorizontalLine1 ;
     private JPanel largeHorizontalLine2;
@@ -102,18 +96,14 @@ public class Frame extends JFrame{
     private GameMouseListener myMouseListener23;
     private GameMouseListener myMouseListener24;
 
-    public Frame(){
-
-    }
-    public Frame(boolean colour, GameHandler opponent, String playerName){
+    public Frame(String playerName){
 
         this.setTitle("Mühle");
         this.setLayout(null);
-        this.setSize(800,975);
+        this.setSize(1200,900);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.playerName = playerName;
-        this.colour = colour;
         playerColour = true;
         gameOver = false;
         amountOfUnusedWhiteStones = 9;
@@ -136,6 +126,14 @@ public class Frame extends JFrame{
         this.opponent = opponent;
         changePlayer = false;
 
+        nameOfPlayer = new JLabel("Hello, "+playerName+"!");
+        nameOfPlayer.setBounds(50,750,300,50);
+        this.add(nameOfPlayer);
+
+        nameOfOpponent = new JLabel("Choose an opponent you want to play with from the right!");
+        nameOfOpponent.setBounds(50,800,600,50);
+        this.add(nameOfOpponent);
+
         blackMoveLabel = new JLabel("black moves");
         blackMoveLabel.setVerticalAlignment(JLabel.CENTER);
         blackMoveLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -155,31 +153,7 @@ public class Frame extends JFrame{
         panel.add(countLabel,BorderLayout.NORTH);
         this.add(panel);
 
-        //creating panels that display playername, opponent name, colour
 
-        button = new JButton("Ok");
-        textField = new JTextField(30);
-        textField.setPreferredSize(new Dimension(400,30));
-        enterAName = new JLabel();
-        if(colour){
-            enterAName.setText("Hello player white! PLease enter your name.");
-        }
-        else {
-            enterAName.setText("Hello player black! Please enter your name.");
-        }
-        yourNamePanel = new JPanel();
-        yourNamePanel.add(textField);
-        yourNamePanel.add(button);
-        yourNamePanel.add(enterAName);
-        yourNamePanel.setBounds(50,775,400,100);
-        this.add(yourNamePanel);
-        yourNameLabel = new JLabel();
-        yourNamePanel.add(yourNameLabel);
-        opponentsNamePanel = new JPanel();
-        opponentsNameLabel = new JLabel();
-        opponentsNamePanel.add(opponentsNameLabel);
-        opponentsNamePanel.setBounds(50,850,400,100);
-        this.add(opponentsNamePanel);
 
 
 
@@ -531,15 +505,7 @@ public class Frame extends JFrame{
 
 
     public void setOpponentName(String opponentName) {this.opponentName = opponentName;}
-    public JPanel getOpponentsNamePanel() {return opponentsNamePanel;}
-    public JLabel getOpponentsNameLabel() {return opponentsNameLabel;}
     public boolean isColour() {return colour;}
-    public JLabel getYourNameLabel() {return yourNameLabel;}
-    public JButton getButton() {return button;}
-    public JTextField getTextField() {return textField;}
-    public String getPlayerName() {return playerName;}
-    public JLabel getEnterAName() {return enterAName;}
-    public JPanel getYourNamePanel() {return yourNamePanel;}
     public void setPlayerName(String playerName) {this.playerName = playerName;}
     public GameHandler getOpponent() {
         return opponent;

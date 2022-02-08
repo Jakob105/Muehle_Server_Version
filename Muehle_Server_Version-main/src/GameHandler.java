@@ -34,12 +34,10 @@ public class GameHandler implements Runnable {
         this.socket = socket;
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(socket.getOutputStream(),true);
-        frame = new Frame();
     }
 
     @Override
     public void run() {
-
-        frame = new Frame(playerColour, opponent, playerName);
+        frame = new Frame(playerName);
     }
 }

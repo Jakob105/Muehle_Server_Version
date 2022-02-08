@@ -2,31 +2,24 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Server {
 
     //Liste, die die einzelnen Threads hält:
-    private static ArrayList<ClientHandler> clients;
-    private static ArrayList<GameHandler> games;
-    private static ArrayList<ClientHandler> activePlayers;
-    //private static ExecutorService playerPool = Executors.newFixedThreadPool(2);
-    //private static ExecutorService gamePool = Executors.newFixedThreadPool(2);
+    private static ArrayList<ClientHandler> activeClientThreads;
+    private static ArrayList<GameHandler> activeGameThreads;
     private static ClientHandler clientThread;
     private static GameHandler gameThread;
+    private static Thread game;
 
-
-    //public static ExecutorService getGamePool() {return gamePool;}
-    public static ArrayList<ClientHandler> getClients(){return clients;}
-    public static ArrayList<GameHandler> getGames() {return games;}
-    public static ArrayList<ClientHandler> getActivePlayers() {return activePlayers;}
+    public static Thread getGame() {return game;}
+    public static ArrayList<ClientHandler> getClients(){return activeClientThreads;}
+    public static ArrayList<GameHandler> getGames() {return activeGameThreads;}
 
     public static void main(String[] args) throws IOException {
 
-        clients = new ArrayList<>();
-        games = new ArrayList<>();
-        activePlayers =  new ArrayList<>();
+        activeClientThreads = new ArrayList<>();
+        activeGameThreads = new ArrayList<>();
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true) {
@@ -38,10 +31,10 @@ public class Server {
 
             gameThread = new GameHandler(client);
             clientThread = new ClientHandler(client, gameThread);
-            games.add(gameThread);
-            clients.add(clientThread);
+            activeGameThreads.add(gameThread);
+            activeClientThreads.add(clientThread);
             new Thread(clientThread).start();
-            //playerPool.execute(clientThread);
+            game = new Thread(gameThread);
         }
     }
 }

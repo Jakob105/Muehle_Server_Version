@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class LogIn_SignIn_Screen extends JFrame{
 
+    private ClientHandler clientHandler;
     private String playerName;
     private String password;
-    private  String username;
-    private static ArrayList<ClientHandler> clients;
-    private static  ArrayList<GameHandler> games;
-    private static ArrayList<ClientHandler> activePlayers;
+    private static ArrayList<ClientHandler> activeClientThreads;
+    private static ArrayList<GameHandler> activeGameThreads;
+
 
     //Database Connection
     private Connection connection;
@@ -45,7 +45,14 @@ public class LogIn_SignIn_Screen extends JFrame{
     private GOBackMouseListener goBackMouseListener;
     //private LogoutMouseListener logoutMouseListener;
 
-    public LogIn_SignIn_Screen(){
+
+
+
+
+    public LogIn_SignIn_Screen(ClientHandler clientHandler) throws SQLException {
+
+        this.clientHandler = clientHandler;
+
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -55,13 +62,10 @@ public class LogIn_SignIn_Screen extends JFrame{
             }
         });
 
-    }
+        activeClientThreads = Server.getClients();
+        activeGameThreads = Server.getGames();
 
-
-
-    public LogIn_SignIn_Screen(ArrayList<ClientHandler>activePlayers) throws SQLException {
-
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/database_registration2","root","mypassword123");
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/registered_users","jakob","vnSRCiÜfSxGF=7=Kp(W_ÖjO)6NÖ~A3");
         statement = connection.createStatement();
 
         this.setTitle("Login");
@@ -114,7 +118,7 @@ public class LogIn_SignIn_Screen extends JFrame{
         backButton = new JButton("Back");
 
         //logoutButton = new JButton("Logout");
-       // logoutButton.setBounds(250,400,100,30);
+        //logoutButton.setBounds(250,400,100,30);
         //logoutMouseListener = new LogoutMouseListener(this);
         //logoutButton.addMouseListener(logoutMouseListener);
 
@@ -134,49 +138,35 @@ public class LogIn_SignIn_Screen extends JFrame{
 
     }
 
+    public ClientHandler getClientHandler() {return clientHandler;}
     public Statement getStatement() {
         return statement;
     }
-
     public String usernameinput() { return usernameTextField.getText(); }
     public String usernameinputstrg() { return String.valueOf(usernameTextField.getText()); }
-
-    public static ArrayList<ClientHandler> getActivePlayers() {
-        return activePlayers;
-    }
-
     public JTextField getUsernameTextField() {
         return usernameTextField;
     }
-
     public JButton GetLoginButton() {
         return loginButton;
     }
-
     public JPasswordField getPasswordField1() {
         return passwordField1;
     }
-
     public String getPasswordField1input() {
         return String.valueOf(passwordField1.getPassword());
     }
-
     public JLabel getPasswordLabel2() {
         return  passwordLabel2;
     }
-
     public JPasswordField getPasswordField2() {
         return passwordField2;
     }
-
     public String getPasswordField2input() { return String.valueOf(passwordField2.getPassword()); }
-
     public JLabel NotYetRegistrated() { return  notYetSignedIn; }
-
     public JLabel getNameOrPasswordNull() {
         return nameOrPasswordNull;
     }
-
     public JLabel getPasswordNotTheSame() { return passwordNotTheSame; }
 
 }

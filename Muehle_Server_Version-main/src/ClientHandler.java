@@ -13,15 +13,18 @@ public class ClientHandler implements Runnable {
     private GameHandler gameHandler;
     private ClientHandler opponent;
 
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
+
     public boolean isSignedIn() {return signedIn;}
     public String getPlayerName() {
         return playerName;
     }
     public void setPlayerColour(boolean playerColour) {
         this.playerColour = playerColour;}
-    public void setOpponent(ClientHandler opponent) {
-        this.opponent = opponent;
-    }
+    public void setPlayerName(String playerName) {this.playerName = playerName;}
+
 
     public ClientHandler (Socket clientSocket, GameHandler gameHandler) throws IOException {
         this.client = clientSocket;
@@ -34,8 +37,8 @@ public class ClientHandler implements Runnable {
     @Override
     public void run(){
         try{
-            LogIn_SignIn_Screen logIn_signIn_screen = new LogIn_SignIn_Screen(Server.getActivePlayers());
-            //new Thread(gameHandler).start();
+            LogIn_SignIn_Screen logIn_signIn_screen = new LogIn_SignIn_Screen(this);
+
             String message = input.readLine();
 
             while(!Objects.equals(message, "quit") && !Objects.equals(message, null)) {
