@@ -5,29 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cdad5b47-7698-4c71-bd36-16451a6050e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/Frame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/GameHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/GameHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LogIn_SignIn_Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LogIn_SignIn_Screen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LoginMouseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LoginMouseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/RegistrateMouseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/RegistrateMouseListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/ClientHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Feld.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Feld.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Frame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Frame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Frame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Frame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/GOBackMouseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/GOBackMouseListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/GameHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/GameHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/GameMouseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/GameMouseListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LogIn_SignIn_Screen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LogIn_SignIn_Screen$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LogIn_SignIn_Screen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LogIn_SignIn_Screen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LoginMouseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LoginMouseListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/ReceivingMessages.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/ReceivingMessages.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/RegistrateMouseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/RegistrateMouseListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/Server.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -2,24 +2,23 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Server {
 
     //Liste, die die einzelnen Threads hält:
-    private static ArrayList<ClientHandler> activeClientThreads;
-    private static ArrayList<GameHandler> activeGameThreads;
+
     private static ClientHandler clientThread;
     private static GameHandler gameThread;
     private static Thread game;
+    private static Hashtable<String, ClientHandler> activePlayers;
 
+    public static Hashtable<String, ClientHandler> getActivePlayers() {return activePlayers;}
     public static Thread getGame() {return game;}
-    public static ArrayList<ClientHandler> getClients(){return activeClientThreads;}
-    public static ArrayList<GameHandler> getGames() {return activeGameThreads;}
 
     public static void main(String[] args) throws IOException {
 
-        activeClientThreads = new ArrayList<>();
-        activeGameThreads = new ArrayList<>();
+        activePlayers = new Hashtable<>();
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true) {
@@ -31,8 +30,6 @@ public class Server {
 
             gameThread = new GameHandler(client);
             clientThread = new ClientHandler(client, gameThread);
-            activeGameThreads.add(gameThread);
-            activeClientThreads.add(clientThread);
             new Thread(clientThread).start();
             game = new Thread(gameThread);
         }

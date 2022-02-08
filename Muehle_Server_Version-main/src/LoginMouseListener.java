@@ -32,8 +32,7 @@ public class LoginMouseListener implements MouseListener {
                 username=logIn_signIn_screen.usernameinputstrg();
                 logIn_signIn_screen.getClientHandler().setPlayerName(username);
                 logIn_signIn_screen.getClientHandler().getGameHandler().setPlayerName(username);
-                Server.getGames().add(logIn_signIn_screen.getClientHandler().getGameHandler());
-                Server.getClients().add(logIn_signIn_screen.getClientHandler());
+                Server.getActivePlayers().put(username,logIn_signIn_screen.getClientHandler());
                 Server.getGame().start();
 
             } catch (SQLException throwables) {
