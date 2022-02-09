@@ -11,24 +11,52 @@ public class ClientHandler implements Runnable {
     private boolean playerColour;
     private boolean signedIn = false;
     private GameHandler gameHandler;
-    private ClientHandler opponent;
+    private GameHandler opponentGameHandler;
+    private ClientHandler clientHandler;
+    private ClientHandler opponentClientHandler;
 
     public GameHandler getGameHandler() {
         return gameHandler;
     }
 
-    public boolean isSignedIn() {return signedIn;}
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
+    }
+
+    public GameHandler getOpponentGameHandler() {
+        return opponentGameHandler;
+    }
+
+    public void setOpponentGameHandler(GameHandler opponentGameHandler) {
+        this.opponentGameHandler = opponentGameHandler;
+    }
+
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
+
+    public void setClientHandler(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
+
+    public ClientHandler getOpponentClientHandler() {
+        return opponentClientHandler;
+    }
+
+    public void setOpponentClientHandler(ClientHandler opponentClientHandler) {
+        this.opponentClientHandler = opponentClientHandler;
+    }
+
     public String getPlayerName() {
         return playerName;
     }
-    public void setPlayerColour(boolean playerColour) {
-        this.playerColour = playerColour;}
+
+
     public void setPlayerName(String playerName) {this.playerName = playerName;}
 
 
-    public ClientHandler (Socket clientSocket, GameHandler gameHandler) throws IOException {
+    public ClientHandler (Socket clientSocket) throws IOException {
         this.client = clientSocket;
-        this.gameHandler = gameHandler;
         input = new BufferedReader(new InputStreamReader(client.getInputStream()));
         output = new PrintWriter(client.getOutputStream(),true);
 
@@ -37,7 +65,7 @@ public class ClientHandler implements Runnable {
     @Override
     public void run(){
         try{
-            LogIn_SignIn_Screen logIn_signIn_screen = new LogIn_SignIn_Screen(this);
+            LogIn_SignIn_Screen logIn_signIn_screen = new LogIn_SignIn_Screen(gameHandler);
 
             String message = input.readLine();
 
@@ -51,21 +79,13 @@ public class ClientHandler implements Runnable {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(Server.getClients().size() > 2) {
-                Server.getClients().get(2).setPlayerColour(this.playerColour);
-                Server.getGames().get(2).setPlayerColour(this.playerColour);
-            }
-            if(Server.getClients().size() > 1 && signedIn) {
-                opponent.output.println(">"+this.playerName+" has left the game.<");
+
+            if(Server.getAvailablePlayers().size() > 1) {
+                output.println(">"+this.playerName+" has left the game.<");
             }
             output.close();
-            Server.getClients().remove(this);
-            Server.getGames().remove(this.gameHandler);
-
-            if(Server.getClients().size() > 1) {
-                Server.getClients().get(0).opponent = Server.getClients().get(1);
-                Server.getClients().get(1).opponent = Server.getClients().get(0);
-            }
+            Server.getAvailablePlayers().remove(this.getPlayerName());
+            System.out.println(Server.getAvailablePlayers());
             try {
                 input.close();
                 client.close();

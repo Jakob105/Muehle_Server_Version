@@ -7,12 +7,10 @@ import java.util.ArrayList;
 
 public class LogIn_SignIn_Screen extends JFrame{
 
+    private GameHandler gameHandler;
     private ClientHandler clientHandler;
     private String playerName;
     private String password;
-    private static ArrayList<ClientHandler> activeClientThreads;
-    private static ArrayList<GameHandler> activeGameThreads;
-
 
     //Database Connection
     private Connection connection;
@@ -45,13 +43,9 @@ public class LogIn_SignIn_Screen extends JFrame{
     private GOBackMouseListener goBackMouseListener;
     //private LogoutMouseListener logoutMouseListener;
 
+    public LogIn_SignIn_Screen(GameHandler gameHandler) throws SQLException {
 
-
-
-
-    public LogIn_SignIn_Screen(ClientHandler clientHandler) throws SQLException {
-
-        this.clientHandler = clientHandler;
+        this.gameHandler = gameHandler;
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -62,8 +56,6 @@ public class LogIn_SignIn_Screen extends JFrame{
             }
         });
 
-        activeClientThreads = Server.getClients();
-        activeGameThreads = Server.getGames();
 
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/registered_users","jakob","vnSRCiÜfSxGF=7=Kp(W_ÖjO)6NÖ~A3");
         statement = connection.createStatement();
@@ -138,7 +130,7 @@ public class LogIn_SignIn_Screen extends JFrame{
 
     }
 
-    public ClientHandler getClientHandler() {return clientHandler;}
+    public GameHandler getGameHandler() {return gameHandler;}
     public Statement getStatement() {
         return statement;
     }

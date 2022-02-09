@@ -30,9 +30,9 @@ public class LoginMouseListener implements MouseListener {
                 String sql = "UPDATE login_data " + "SET is_active = "+1+" WHERE user_name='"+logIn_signIn_screen.usernameinputstrg()+"'";
                 logIn_signIn_screen.getStatement().executeUpdate(sql);
                 username=logIn_signIn_screen.usernameinputstrg();
-                logIn_signIn_screen.getClientHandler().setPlayerName(username);
-                logIn_signIn_screen.getClientHandler().getGameHandler().setPlayerName(username);
-                Server.getActivePlayers().put(username,logIn_signIn_screen.getClientHandler());
+                logIn_signIn_screen.getGameHandler().setPlayerName(username);
+                Server.getAvailablePlayers().put(username,logIn_signIn_screen.getGameHandler());
+                System.out.println(Server.getAvailablePlayers());
                 Server.getGame().start();
 
             } catch (SQLException throwables) {

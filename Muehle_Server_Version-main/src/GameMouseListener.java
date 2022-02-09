@@ -20,10 +20,10 @@ public class GameMouseListener implements MouseListener {
                     frame.removeStone(field);
                     if (frame.allStonesAreBlocked() || frame.lessThanThreeStonesOnBoard(frame.isPlayerColour())) {
                         frame.setGameOver(true);
-                        frame.getOpponent().getFrame().setGameOver(true);
+                        frame.getOpponentGameHandler().getFrame().setGameOver(true);
 
                         frame.displayWinner(frame.isPlayerColour());
-                        frame.getOpponent().getFrame().displayWinner(frame.getOpponent().getFrame().isPlayerColour());
+                        frame.getOpponentGameHandler().getFrame().displayWinner(frame.getOpponentGameHandler().getFrame().isPlayerColour());
                     }
                 }
                 else {
@@ -41,7 +41,7 @@ public class GameMouseListener implements MouseListener {
 
             if (frame.isChangePlayer()) {
                 frame.setItsYourTurn(false);
-                frame.getOpponent().getFrame().setItsYourTurn(true);
+                frame.getOpponentGameHandler().getFrame().setItsYourTurn(true);
                 frame.setChangePlayer(false);
             }
         }

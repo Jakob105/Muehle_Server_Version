@@ -1,13 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class Frame extends JFrame{
+    private boolean logicalColour;
     private boolean playerColour;
-    private boolean colour;
     private boolean gameOver;
     private int amountOfUnusedWhiteStones;
     private int amountOfUnusedBlackStones;
@@ -23,7 +22,12 @@ public class Frame extends JFrame{
     private List<Feld> whiteStonesOutOfGame;
     private List<Feld> blackStonesOutOfGame;
     private Feld[][] fields = new Feld[3][8];
-    private GameHandler opponent;
+
+    private GameHandler opponentGameHandler;
+    private GameHandler gameHandler;
+    private ClientHandler clientHandler;
+    private ClientHandler opponentClientHandler;
+
     private String playerName;
     private String opponentName;
 
@@ -36,8 +40,15 @@ public class Frame extends JFrame{
     private JLabel whiteWins;
     private JPanel panel;
 
-    private JLabel nameOfPlayer;
-    private JLabel nameOfOpponent;
+    private JLabel greetingLabel;
+
+    private JComboBox availablePlayers;
+    private DefaultComboBoxModel comboBoxModel;
+    private String[] playerNames;
+    private JButton selectOpponent;
+    private SelectOpponentMouseListener selectOpponentMouseListener;
+
+
 
     private JPanel largeHorizontalLine1 ;
     private JPanel largeHorizontalLine2;
@@ -96,15 +107,15 @@ public class Frame extends JFrame{
     private GameMouseListener myMouseListener23;
     private GameMouseListener myMouseListener24;
 
-    public Frame(String playerName){
+    public Frame(String playerName, ClientHandler clientHandler, GameHandler gameHandler){
 
         this.setTitle("Mühle");
         this.setLayout(null);
-        this.setSize(1200,900);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(1200,800);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setResizable(false);
         this.playerName = playerName;
-        playerColour = true;
+        logicalColour = true;
         gameOver = false;
         amountOfUnusedWhiteStones = 9;
         amountOfUnusedBlackStones = 9;
@@ -117,22 +128,7 @@ public class Frame extends JFrame{
         blackStonesOnBoard = new ArrayList<Feld>();
         whiteStonesOutOfGame = new ArrayList<Feld>();
         blackStonesOutOfGame = new ArrayList<Feld>();
-        if(colour) {
-            itsYourTurn = true;
-        }
-        else {
-            itsYourTurn = false;
-        }
-        this.opponent = opponent;
         changePlayer = false;
-
-        nameOfPlayer = new JLabel("Hello, "+playerName+"!");
-        nameOfPlayer.setBounds(50,750,300,50);
-        this.add(nameOfPlayer);
-
-        nameOfOpponent = new JLabel("Choose an opponent you want to play with from the right!");
-        nameOfOpponent.setBounds(50,800,600,50);
-        this.add(nameOfOpponent);
 
         blackMoveLabel = new JLabel("black moves");
         blackMoveLabel.setVerticalAlignment(JLabel.CENTER);
@@ -153,10 +149,40 @@ public class Frame extends JFrame{
         panel.add(countLabel,BorderLayout.NORTH);
         this.add(panel);
 
+        playerNames = new String[Server.getAvailablePlayers().size() - 1];
+
+        int i = 0;
+        for(String key : Server.getAvailablePlayers().keySet()) {
+            if(!key.equals(playerName)){
+                playerNames[i]=key;
+                i++;
+            }
+        }
+
+        //Selecting an opponent
+        greetingLabel = new JLabel("Hello, "+playerName+"! Please choose an opponent.");
+        greetingLabel.setBounds(775,1,300,50);
+        this.add(greetingLabel);
+        comboBoxModel = new DefaultComboBoxModel(playerNames);
+        availablePlayers = new JComboBox(comboBoxModel);
+        availablePlayers.setBounds(775,50,200,30);
+        this.add(availablePlayers);
+
+        selectOpponent = new JButton("Select Opponnent");
+        selectOpponent.setBounds(1005,50,165,30);
+
+        selectOpponentMouseListener = new SelectOpponentMouseListener(playerName,availablePlayers,gameHandler,clientHandler);
+        selectOpponent.addMouseListener(selectOpponentMouseListener);
+
+        this.add(selectOpponent);
 
 
 
 
+
+
+
+        //GUI components of gamefield
         largeHorizontalLine1 = new JPanel();
         largeHorizontalLine1.setBackground(Color.black);
         largeHorizontalLine1.setBounds(100,70,275,10);
@@ -454,6 +480,10 @@ public class Frame extends JFrame{
         fields[2][7].setBounds(250,375,50,50);
         fields[2][7].setIndex(24);
         this.add(fields[2][7]);
+        JOptionPane jOptionPane = new JOptionPane();
+
+        this.add(jOptionPane);
+
 
         JLabel TimerLabelWhite = new JLabel();
         JLabel TimerLabelBlack = new JLabel();
@@ -468,7 +498,7 @@ public class Frame extends JFrame{
             int j = 120;
 
             public void run() {
-                if (colour) {
+                if (playerColour) {
                     if (itsYourTurn) {
                         TimerLabelWhite.setText("White Player Time left: " + i);
                         i--;
@@ -504,11 +534,9 @@ public class Frame extends JFrame{
     }
 
 
-    public void setOpponentName(String opponentName) {this.opponentName = opponentName;}
-    public boolean isColour() {return colour;}
-    public void setPlayerName(String playerName) {this.playerName = playerName;}
-    public GameHandler getOpponent() {
-        return opponent;
+
+    public GameHandler getOpponentGameHandler() {
+        return opponentGameHandler;
     }
     public boolean isChangePlayer() {
         return changePlayer;
@@ -532,7 +560,7 @@ public class Frame extends JFrame{
         this.gameOver = gameOver;
     }
     public boolean isPlayerColour() {
-        return playerColour;
+        return logicalColour;
     }
     public void setaMillWasCreatedInThePreviousAction(boolean aMillWasCreatedInThePreviousAction) {
         this.aMillWasCreatedInThePreviousAction = aMillWasCreatedInThePreviousAction;
@@ -558,45 +586,45 @@ public class Frame extends JFrame{
             else {
                 changePlayer = true;
                 adaptDisplayOfCurrentPlayer();
-                opponent.getFrame().adaptDisplayOfCurrentPlayer();
+                opponentGameHandler.getFrame().adaptDisplayOfCurrentPlayer();
             }
         }
     }
     public void firstPhaseSetStone(Feld field){
-        Feld opponentsField = opponent.getFrame().indexToField(field.getIndex());
-        if (playerColour){
+        Feld opponentsField = opponentGameHandler.getFrame().indexToField(field.getIndex());
+        if (logicalColour){
             field.setIcon(new ImageIcon("WeisserStein.png"));
             opponentsField.setIcon(new ImageIcon("WeisserStein.png"));
 
             whiteStonesOnBoard.add(field);
-            opponent.getFrame().whiteStonesOnBoard.add(opponentsField);
+            opponentGameHandler.getFrame().whiteStonesOnBoard.add(opponentsField);
 
             amountOfUnusedWhiteStones --;
-            opponent.getFrame().amountOfUnusedWhiteStones--;
+            opponentGameHandler.getFrame().amountOfUnusedWhiteStones--;
         }
         else {
             field.setIcon(new ImageIcon("SchwarzerStein.png"));
             opponentsField.setIcon(new ImageIcon("SchwarzerStein.png"));
 
             blackStonesOnBoard.add(field);
-            opponent.getFrame().blackStonesOnBoard.add(opponentsField);
+            opponentGameHandler.getFrame().blackStonesOnBoard.add(opponentsField);
 
             amountOfUnusedBlackStones --;
-            opponent.getFrame().amountOfUnusedBlackStones--;
+            opponentGameHandler.getFrame().amountOfUnusedBlackStones--;
         }
         field.setEmpty(false);
         opponentsField.setEmpty(false);
 
-        field.setColourOfStone(playerColour);
-        opponentsField.setColourOfStone(playerColour);
+        field.setColourOfStone(logicalColour);
+        opponentsField.setColourOfStone(logicalColour);
 
-        playerColour = !playerColour;
-        opponent.getFrame().playerColour = ! opponent.getFrame().playerColour;
+        logicalColour = !logicalColour;
+        opponentGameHandler.getFrame().logicalColour = ! opponentGameHandler.getFrame().logicalColour;
     }
     public void secondPhaseMove(Feld field){
-        if (!playerColour){
+        if (!logicalColour){
             panel.remove(countLabel);
-            opponent.getFrame().panel.remove(opponent.getFrame().countLabel);
+            opponentGameHandler.getFrame().panel.remove(opponentGameHandler.getFrame().countLabel);
         }
         if (stoneIsSelected){
             if (fieldsAreNeighbours(selectedStone,field) && field.isEmpty()){
@@ -607,7 +635,7 @@ public class Frame extends JFrame{
                 }
                 else {
                     adaptDisplayOfCurrentPlayer();
-                    opponent.getFrame().adaptDisplayOfCurrentPlayer();
+                    opponentGameHandler.getFrame().adaptDisplayOfCurrentPlayer();
                     changePlayer = true;
                 }
             }
@@ -618,7 +646,7 @@ public class Frame extends JFrame{
         else {
             if (allStonesAreBlocked()){
                 gameOver = true;
-                opponent.getFrame().gameOver = true;
+                opponentGameHandler.getFrame().gameOver = true;
             }
             else {
                 selectAStoneYouWantToMoveInPhaseTwo(field);
@@ -627,21 +655,21 @@ public class Frame extends JFrame{
     }
 
     public void secondPhaseSetStone(Feld field){
-        Feld opponentsField = opponent.getFrame().indexToField(field.getIndex());
+        Feld opponentsField = opponentGameHandler.getFrame().indexToField(field.getIndex());
 
         field.setEmpty(false);
         opponentsField.setEmpty(false);
 
         selectedStone.setEmpty(true);
-        opponent.getFrame().selectedStone.setEmpty(true);
+        opponentGameHandler.getFrame().selectedStone.setEmpty(true);
 
         selectedStone.setBackground(Color.white);
-        opponent.getFrame().selectedStone.setBackground(Color.white);
+        opponentGameHandler.getFrame().selectedStone.setBackground(Color.white);
         selectedStone.setIcon(null);
-        opponent.getFrame().selectedStone.setIcon(null);
+        opponentGameHandler.getFrame().selectedStone.setIcon(null);
         stoneIsSelected = false;
-        opponent.getFrame().stoneIsSelected = false;
-        if (playerColour){
+        opponentGameHandler.getFrame().stoneIsSelected = false;
+        if (logicalColour){
             field.setColourOfStone(true);
             opponentsField.setColourOfStone(true);
             field.setIcon(new ImageIcon("WeisserStein.png"));
@@ -654,23 +682,23 @@ public class Frame extends JFrame{
             field.setIcon(new ImageIcon("SchwarzerStein.png"));
             opponentsField.setIcon(new ImageIcon("SchwarzerStein.png"));
         }
-        playerColour = !playerColour;
-        opponent.getFrame().playerColour = !opponent.getFrame().playerColour;
+        logicalColour = !logicalColour;
+        opponentGameHandler.getFrame().logicalColour = !opponentGameHandler.getFrame().logicalColour;
     }
     public void selectAStoneYouWantToMoveInPhaseTwo(Feld field){
-        Feld opponentsField = opponent.getFrame().indexToField(field.getIndex());
-        if (!field.isEmpty() && field.isColourOfStone() == playerColour){
+        Feld opponentsField = opponentGameHandler.getFrame().indexToField(field.getIndex());
+        if (!field.isEmpty() && field.isColourOfStone() == logicalColour){
             if (!stoneIsBlocked(field)){
                 if (stoneIsSelected){
                     selectedStone.setBackground(Color.white);
-                    opponent.getFrame().selectedStone.setBackground(Color.white);
+                    opponentGameHandler.getFrame().selectedStone.setBackground(Color.white);
                 }
                 field.setBackground(Color.green);
                 selectedStone = field;
-                opponent.getFrame().selectedStone = opponentsField;
+                opponentGameHandler.getFrame().selectedStone = opponentsField;
 
                 stoneIsSelected = true;
-                opponent.getFrame().stoneIsSelected = true;
+                opponentGameHandler.getFrame().stoneIsSelected = true;
             }
             else {
                 if (stoneIsSelected){
@@ -678,24 +706,24 @@ public class Frame extends JFrame{
                 }
                 field.setBackground(Color.red);
                 selectedStone = field;
-                opponent.getFrame().selectedStone = opponentsField;
+                opponentGameHandler.getFrame().selectedStone = opponentsField;
                 stoneIsSelected = true;
-                opponent.getFrame().stoneIsSelected = true;
+                opponentGameHandler.getFrame().stoneIsSelected = true;
             }
         }
     }
     public void selectAStoneYouWantToMoveInPhaseThree(Feld field){
-        Feld opponentsField = opponent.getFrame().indexToField(field.getIndex());
-        if (!field.isEmpty() && field.isColourOfStone() == playerColour){
+        Feld opponentsField = opponentGameHandler.getFrame().indexToField(field.getIndex());
+        if (!field.isEmpty() && field.isColourOfStone() == logicalColour){
             if (stoneIsSelected){
                 selectedStone.setBackground(Color.white);
             }
             field.setBackground(Color.green);
             selectedStone = field;
-            opponent.getFrame().selectedStone = opponentsField;
+            opponentGameHandler.getFrame().selectedStone = opponentsField;
 
             stoneIsSelected = true;
-            opponent.getFrame().stoneIsSelected = true;
+            opponentGameHandler.getFrame().stoneIsSelected = true;
         }
     }
     public void thirdPhaseMove(Feld field){
@@ -708,7 +736,7 @@ public class Frame extends JFrame{
                 }
                 else {
                     adaptDisplayOfCurrentPlayer();
-                    opponent.getFrame().adaptDisplayOfCurrentPlayer();
+                    opponentGameHandler.getFrame().adaptDisplayOfCurrentPlayer();
                     changePlayer = true;
                 }
             }
@@ -953,7 +981,7 @@ public class Frame extends JFrame{
     }
     public boolean allStonesAreBlocked(){
         boolean returnValue = false;
-        if (playerColour){
+        if (logicalColour){
             int i = 0;
             while (i < whiteStonesOnBoard.size() && stoneIsBlocked(whiteStonesOnBoard.get(i))) {
                 i++;
@@ -984,31 +1012,31 @@ public class Frame extends JFrame{
         return returnValue;
     }
     public void removeStone(Feld field){
-        Feld opponentsField = opponent.getFrame().indexToField(field.getIndex());
-        if (!field.isEmpty() && field.isColourOfStone() == playerColour){
+        Feld opponentsField = opponentGameHandler.getFrame().indexToField(field.getIndex());
+        if (!field.isEmpty() && field.isColourOfStone() == logicalColour){
             if (notAllStonesAreInMill()){
                 if (!(stoneIsInMill(field))){
-                    if (playerColour){
+                    if (logicalColour){
 
                         whiteStonesOutOfGame.add(field);
-                        opponent.getFrame().whiteStonesOnBoard.add(opponentsField);
+                        opponentGameHandler.getFrame().whiteStonesOnBoard.add(opponentsField);
 
                         whiteStonesOnBoard.remove(field);
-                        opponent.getFrame().whiteStonesOnBoard.remove(opponentsField);
+                        opponentGameHandler.getFrame().whiteStonesOnBoard.remove(opponentsField);
 
                         amountOfWhiteStonesOutOfGame++;
-                        opponent.getFrame().amountOfWhiteStonesOutOfGame++;
+                        opponentGameHandler.getFrame().amountOfWhiteStonesOutOfGame++;
                     }
                     else {
 
                         blackStonesOutOfGame.add(field);
-                        opponent.getFrame().blackStonesOnBoard.add(opponentsField);
+                        opponentGameHandler.getFrame().blackStonesOnBoard.add(opponentsField);
 
                         blackStonesOnBoard.remove(field);
-                        opponent.getFrame().blackStonesOnBoard.remove(opponentsField);
+                        opponentGameHandler.getFrame().blackStonesOnBoard.remove(opponentsField);
 
                         amountOfBlackStonesOutOfGame++;
-                        opponent.getFrame().amountOfBlackStonesOutOfGame++;
+                        opponentGameHandler.getFrame().amountOfBlackStonesOutOfGame++;
                     }
                     field.setIcon(null);
                     opponentsField.setIcon(null);
@@ -1016,7 +1044,7 @@ public class Frame extends JFrame{
                     removeRequestToDeleteStone();
 
                     adaptDisplayOfCurrentPlayer();
-                    opponent.getFrame().adaptDisplayOfCurrentPlayer();
+                    opponentGameHandler.getFrame().adaptDisplayOfCurrentPlayer();
 
                     field.setEmpty(true);
                     opponentsField.setEmpty(true);
@@ -1026,32 +1054,32 @@ public class Frame extends JFrame{
                 }
             }
             else {
-                if (playerColour){
+                if (logicalColour){
                     whiteStonesOnBoard.remove(field);
-                    opponent.getFrame().whiteStonesOnBoard.remove(opponentsField);
+                    opponentGameHandler.getFrame().whiteStonesOnBoard.remove(opponentsField);
 
                     whiteStonesOutOfGame.add(field);
-                    opponent.getFrame().whiteStonesOnBoard.remove(opponentsField);
+                    opponentGameHandler.getFrame().whiteStonesOnBoard.remove(opponentsField);
 
                     amountOfWhiteStonesOutOfGame++;
-                    opponent.getFrame().amountOfWhiteStonesOutOfGame++;
+                    opponentGameHandler.getFrame().amountOfWhiteStonesOutOfGame++;
                 }
                 else {
                     blackStonesOnBoard.remove(field);
-                    opponent.getFrame().blackStonesOnBoard.remove(opponentsField);
+                    opponentGameHandler.getFrame().blackStonesOnBoard.remove(opponentsField);
 
                     blackStonesOutOfGame.add(field);
-                    opponent.getFrame().blackStonesOutOfGame.add(opponentsField);
+                    opponentGameHandler.getFrame().blackStonesOutOfGame.add(opponentsField);
 
                     amountOfBlackStonesOutOfGame++;
-                    opponent.getFrame().amountOfBlackStonesOutOfGame++;
+                    opponentGameHandler.getFrame().amountOfBlackStonesOutOfGame++;
                 }
                 field.setIcon(null);
                 opponentsField.setIcon(null);
                 removeRequestToDeleteStone();
 
                 adaptDisplayOfCurrentPlayer();
-                opponent.getFrame().adaptDisplayOfCurrentPlayer();
+                opponentGameHandler.getFrame().adaptDisplayOfCurrentPlayer();
 
                 field.setEmpty(true);
                 opponentsField.setEmpty(true);
@@ -1063,7 +1091,7 @@ public class Frame extends JFrame{
     }
     public boolean notAllStonesAreInMill(){
         boolean returnValue = true;
-        if (playerColour){
+        if (logicalColour){
             int i = 0;
             while (i < whiteStonesOnBoard.size() && stoneIsInMill(whiteStonesOnBoard.get(i))) {
                 i++;
@@ -1084,7 +1112,7 @@ public class Frame extends JFrame{
         return returnValue;
     }
     public void adaptDisplayOfCurrentPlayer(){
-        if (playerColour){
+        if (logicalColour){
             panel.remove(blackMoveLabel);
             panel.setBackground(new Color(245,245,220,255));
             blackMoveLabel.setForeground(Color.black);
@@ -1101,7 +1129,7 @@ public class Frame extends JFrame{
         }
     }
     public void addRequestToDeleteStone(){
-        if(playerColour){
+        if(logicalColour){
             blackTakeStoneLabel = new JLabel("take white stone");
             blackTakeStoneLabel.setVerticalAlignment(JLabel.BOTTOM);
             blackTakeStoneLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -1116,7 +1144,7 @@ public class Frame extends JFrame{
         }
     }
     public void removeRequestToDeleteStone(){
-        if(playerColour){
+        if(logicalColour){
             panel.remove(blackTakeStoneLabel);
         }
         else {

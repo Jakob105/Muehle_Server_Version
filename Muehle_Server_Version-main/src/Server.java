@@ -11,14 +11,14 @@ public class Server {
     private static ClientHandler clientThread;
     private static GameHandler gameThread;
     private static Thread game;
-    private static Hashtable<String, ClientHandler> activePlayers;
+    private static Hashtable<String, GameHandler> availablePlayers;
 
-    public static Hashtable<String, ClientHandler> getActivePlayers() {return activePlayers;}
+    public static Hashtable<String, GameHandler> getAvailablePlayers() {return availablePlayers;}
     public static Thread getGame() {return game;}
 
     public static void main(String[] args) throws IOException {
 
-        activePlayers = new Hashtable<>();
+        availablePlayers = new Hashtable<>();
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true) {
@@ -28,8 +28,10 @@ public class Server {
             Socket client = serverSocket.accept();
             System.out.println("[SERVER]: Connected to client!");
 
-            gameThread = new GameHandler(client);
-            clientThread = new ClientHandler(client, gameThread);
+            clientThread = new ClientHandler(client);
+            gameThread = new GameHandler(client, clientThread);
+            clientThread.setGameHandler(gameThread);
+
             new Thread(clientThread).start();
             game = new Thread(gameThread);
         }
