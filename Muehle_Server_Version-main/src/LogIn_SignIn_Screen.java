@@ -4,6 +4,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class LogIn_SignIn_Screen extends JFrame{
 
@@ -43,7 +47,7 @@ public class LogIn_SignIn_Screen extends JFrame{
     private LoginMouseListener loginMouseListener;
     private RegistrateMouseListener registrateMouseListener;
     private GOBackMouseListener goBackMouseListener;
-    //private LogoutMouseListener logoutMouseListener;
+    private LogoutMouseListener logoutMouseListener;
 
     public LogIn_SignIn_Screen(){
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -56,6 +60,7 @@ public class LogIn_SignIn_Screen extends JFrame{
         });
 
     }
+
 
 
 
@@ -110,13 +115,13 @@ public class LogIn_SignIn_Screen extends JFrame{
         backButton.setBounds(250,300,100,30);
         goBackMouseListener = new GOBackMouseListener(this);
         backButton.addMouseListener(goBackMouseListener);
-
         backButton = new JButton("Back");
 
-        //logoutButton = new JButton("Logout");
-       // logoutButton.setBounds(250,400,100,30);
-        //logoutMouseListener = new LogoutMouseListener(this);
-        //logoutButton.addMouseListener(logoutMouseListener);
+        logoutButton = new JButton("Logout");
+        logoutButton.setBounds(250,400,100,30);
+        logoutMouseListener = new LogoutMouseListener(this);
+        logoutButton.addMouseListener(logoutMouseListener);
+        //logoutButton.setVisible(false);
 
         this.add(usernameLabel);
         this.add(passwordLabel1);
@@ -127,13 +132,15 @@ public class LogIn_SignIn_Screen extends JFrame{
         this.add(notYetSignedIn);
         this.add(loginButton);
         this.add(registrateButton);
-        //this.add(logoutButton);
+        this.add(logoutButton);
         this.add(backButton);
         this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 
     }
 
+    public Connection getConnection() { return connection; }
     public Statement getStatement() {
         return statement;
     }
@@ -151,6 +158,10 @@ public class LogIn_SignIn_Screen extends JFrame{
 
     public JButton GetLoginButton() {
         return loginButton;
+    }
+
+    public JButton logoutButton() {
+        return logoutButton;
     }
 
     public JPasswordField getPasswordField1() {
@@ -178,5 +189,55 @@ public class LogIn_SignIn_Screen extends JFrame{
     }
 
     public JLabel getPasswordNotTheSame() { return passwordNotTheSame; }
+
+    public boolean checkUsername(String Username)
+    {
+        PreparedStatement ps;
+        ResultSet rs;
+        boolean checkUser = false;
+        String query = "SELECT * FROM `registration_table` WHERE `Username` =?";
+
+        try {
+            ps = getConnection().prepareStatement(query);
+            ps.setString(1, Username);
+
+            rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                checkUser = true;
+            }
+        } catch (SQLException ex) {
+        }
+        return checkUser;
+    }
+    public String viewValue(Connection con, String command) throws SQLException
+    {
+        String value = null;
+        Statement stmt = null;
+
+        try
+        {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+                value = value = rs.getString(1);
+        }
+
+        catch (SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        finally
+        {
+            if (stmt !=
+                    null) { stmt.close(); }
+        }
+
+        return value;
+
+    }
 
 }
