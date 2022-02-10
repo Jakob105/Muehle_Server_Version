@@ -3,6 +3,8 @@ import java.awt.event.MouseListener;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Enumeration;
 
 public class LoginMouseListener implements MouseListener {
 
@@ -29,9 +31,16 @@ public class LoginMouseListener implements MouseListener {
             try {
                 String sql = "UPDATE login_data " + "SET is_active = "+1+" WHERE user_name='"+logIn_signIn_screen.usernameinputstrg()+"'";
                 logIn_signIn_screen.getStatement().executeUpdate(sql);
-                username=logIn_signIn_screen.usernameinputstrg();
+                username = logIn_signIn_screen.usernameinputstrg();
                 logIn_signIn_screen.getGameHandler().setPlayerName(username);
+
+                for(GameHandler gameHandler: Server.getGameHandlerList()) {
+                    gameHandler.getFrame().getAvailablePlayers().addItem(username);
+                    gameHandler.getFrame().getAvailablePlayers().repaint();
+                }
+
                 Server.getAvailablePlayers().put(username,logIn_signIn_screen.getGameHandler());
+                Server.getGameHandlerList().add(logIn_signIn_screen.getGameHandler());
                 System.out.println(Server.getAvailablePlayers());
                 Server.getGame().start();
 

@@ -47,7 +47,7 @@ public class GameHandler implements Runnable {
     }
     public GameHandler(Socket socket, ClientHandler clienthandler) throws IOException {
         this.socket = socket;
-        this.
+        this.clientHandler = clienthandler;
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(socket.getOutputStream(),true);
     }
@@ -55,6 +55,6 @@ public class GameHandler implements Runnable {
     @Override
     public void run() {
 
-        frame = new Frame(playerName,clientHandler,gameHandler);
+        frame = new Frame(playerName,clientHandler,this);
     }
 }

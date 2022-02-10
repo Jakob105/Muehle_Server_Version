@@ -41,6 +41,7 @@ public class Frame extends JFrame{
     private JPanel panel;
 
     private JLabel greetingLabel;
+    private JLabel chooseOpponent;
 
     private JComboBox availablePlayers;
     private DefaultComboBoxModel comboBoxModel;
@@ -109,12 +110,16 @@ public class Frame extends JFrame{
 
     public Frame(String playerName, ClientHandler clientHandler, GameHandler gameHandler){
 
+        this.gameHandler = gameHandler;
+        this.clientHandler = clientHandler;
+        this.playerName = playerName;
         this.setTitle("Mühle");
         this.setLayout(null);
         this.setSize(1200,800);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setResizable(false);
         this.playerName = playerName;
+        itsYourTurn = false;
         logicalColour = true;
         gameOver = false;
         amountOfUnusedWhiteStones = 9;
@@ -160,27 +165,24 @@ public class Frame extends JFrame{
         }
 
         //Selecting an opponent
-        greetingLabel = new JLabel("Hello, "+playerName+"! Please choose an opponent.");
+        greetingLabel = new JLabel("Hello, "+playerName+"!");
         greetingLabel.setBounds(775,1,300,50);
+        chooseOpponent = new JLabel("Please choose an opponent.");
+        chooseOpponent.setBounds(775,35,300,50);
+        this.add(chooseOpponent);
         this.add(greetingLabel);
         comboBoxModel = new DefaultComboBoxModel(playerNames);
         availablePlayers = new JComboBox(comboBoxModel);
-        availablePlayers.setBounds(775,50,200,30);
+        availablePlayers.setBounds(775,70,200,30);
         this.add(availablePlayers);
 
         selectOpponent = new JButton("Select Opponnent");
-        selectOpponent.setBounds(1005,50,165,30);
+        selectOpponent.setBounds(1005,70,165,30);
 
-        selectOpponentMouseListener = new SelectOpponentMouseListener(playerName,availablePlayers,gameHandler,clientHandler);
+        selectOpponentMouseListener = new SelectOpponentMouseListener(this);
         selectOpponent.addMouseListener(selectOpponentMouseListener);
 
         this.add(selectOpponent);
-
-
-
-
-
-
 
         //GUI components of gamefield
         largeHorizontalLine1 = new JPanel();
@@ -533,8 +535,13 @@ public class Frame extends JFrame{
         this.setVisible(true);
     }
 
+    public void setOpponentGameHandler(GameHandler opponentGameHandler) {
+        this.opponentGameHandler = opponentGameHandler;
+    }
 
-
+    public GameHandler getGameHandler() {return gameHandler;}
+    public JComboBox getAvailablePlayers() {return availablePlayers;}
+    public void setPlayerColour(boolean playerColour) {this.playerColour = playerColour;}
     public GameHandler getOpponentGameHandler() {
         return opponentGameHandler;
     }
@@ -1251,6 +1258,37 @@ public class Frame extends JFrame{
                 break;
         }
         return returnValue;
+    }
+    public void cleanUp(){
+        itsYourTurn = false;
+        logicalColour = true;
+        gameOver = false;
+        amountOfUnusedWhiteStones = 9;
+        amountOfUnusedBlackStones = 9;
+        amountOfWhiteStonesOutOfGame = 0;
+        amountOfBlackStonesOutOfGame = 0;
+        aMillWasCreatedInThePreviousAction = false;
+        stoneIsSelected = false;
+        selectedStone = null;
+        whiteStonesOnBoard = new ArrayList<Feld>();
+        blackStonesOnBoard = new ArrayList<Feld>();
+        whiteStonesOutOfGame = new ArrayList<Feld>();
+        blackStonesOutOfGame = new ArrayList<Feld>();
+        changePlayer = false;
+        for(int i = 0; i <= 2; i++){
+            for(int j = 0; j <= 7; j++){
+                fields[i][j].setEmpty(true);
+                fields[i][j].setIcon(null);
+
+            }
+        }
+        panel.remove(blackMoveLabel);
+        panel.setBackground(new Color(245,245,220,255));
+        blackMoveLabel.setForeground(Color.black);
+        countLabel.setForeground(Color.black);
+        countLabel.setText(String.valueOf(amountOfUnusedBlackStones));
+        panel.add(whiteMoveLabel);
+        this.repaint();
     }
 
 }

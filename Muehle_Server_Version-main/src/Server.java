@@ -3,6 +3,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class Server {
 
@@ -12,13 +13,16 @@ public class Server {
     private static GameHandler gameThread;
     private static Thread game;
     private static Hashtable<String, GameHandler> availablePlayers;
+    private static List<GameHandler> gameHandlerList;
 
     public static Hashtable<String, GameHandler> getAvailablePlayers() {return availablePlayers;}
     public static Thread getGame() {return game;}
+    public static List<GameHandler> getGameHandlerList() {return gameHandlerList;}
 
     public static void main(String[] args) throws IOException {
 
         availablePlayers = new Hashtable<>();
+        gameHandlerList = new ArrayList<>();
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true) {
