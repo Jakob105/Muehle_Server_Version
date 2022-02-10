@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdad5b47-7698-4c71-bd36-16451a6050e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/Frame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LogIn_SignIn_Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LogIn_SignIn_Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LoginMouseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LoginMouseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LogoutMouseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/LogoutMouseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Muehle_Server_Version-main/src/RegistrateMouseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Muehle_Server_Version-main/src/RegistrateMouseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LogIn_SignIn_Screen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LogIn_SignIn_Screen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LoginMouseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/LoginMouseListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Muehle_Server_Version/RegistrateMouseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Muehle_Server_Version/RegistrateMouseListener.class" afterDir="false" />
-    </list>
+    <list default="true" id="cdad5b47-7698-4c71-bd36-16451a6050e9" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
