@@ -86,9 +86,13 @@ public class LogIn_SignIn_Screen extends JFrame{
         nameOrPasswordNull = new JLabel("UserName or password is empty.");
         nameOrPasswordNull.setBounds(250,40,400,30);
         nameOrPasswordNull.setForeground(Color.red);
+        nameOrPasswordNull.setVisible(false);
+
+
         passwordNotTheSame = new JLabel("passwords don't match.");
         passwordNotTheSame.setBounds(250,40,400,30);
         passwordNotTheSame.setForeground(Color.red);
+        passwordNotTheSame.setVisible(false);
 
 
         //TextFields
@@ -121,7 +125,6 @@ public class LogIn_SignIn_Screen extends JFrame{
         logoutButton.setBounds(250,400,100,30);
         logoutMouseListener = new LogoutMouseListener(this);
         logoutButton.addMouseListener(logoutMouseListener);
-        //logoutButton.setVisible(false);
 
         this.add(usernameLabel);
         this.add(passwordLabel1);
@@ -134,6 +137,8 @@ public class LogIn_SignIn_Screen extends JFrame{
         this.add(registrateButton);
         this.add(logoutButton);
         this.add(backButton);
+        this.add(passwordNotTheSame);
+        this.add(nameOrPasswordNull);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 

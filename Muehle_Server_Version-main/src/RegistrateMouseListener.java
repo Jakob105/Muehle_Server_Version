@@ -29,7 +29,7 @@ public class RegistrateMouseListener implements MouseListener {
             } else {
                 if (itemNo ==null) {
 
-                    if ((logIn_signIn_screen.getPasswordField1input().equals(logIn_signIn_screen.getPasswordField2input()) == true) & (logIn_signIn_screen.getPasswordField1input().isEmpty() == false)) {
+                    if ((logIn_signIn_screen.getPasswordField1input().equals(logIn_signIn_screen.getPasswordField2input()) == true) && (logIn_signIn_screen.getPasswordField1input().isEmpty() == false)  &&(logIn_signIn_screen.usernameinput().isEmpty()==false)) {
 
 
                         logIn_signIn_screen.GetLoginButton().setVisible(true);
@@ -51,11 +51,12 @@ public class RegistrateMouseListener implements MouseListener {
                             throwables.printStackTrace();
                         }
                     } else {
-                        logIn_signIn_screen.add(logIn_signIn_screen.getPasswordNotTheSame());
+                        logIn_signIn_screen.getPasswordNotTheSame().setVisible(true);
+                        logIn_signIn_screen.getPasswordNotTheSame().setText("password not the same");
                         logIn_signIn_screen.repaint();
                     }
                 } else {
-                    logIn_signIn_screen.add(logIn_signIn_screen.getPasswordNotTheSame());
+                    logIn_signIn_screen.getPasswordNotTheSame().setVisible(true);
                     logIn_signIn_screen.getPasswordNotTheSame().setText("username already given");
                     logIn_signIn_screen.repaint();
                 }

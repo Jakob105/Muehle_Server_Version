@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Frame extends JFrame{
+    private LogoutMouseListener logoutMouseListener;
     private boolean playerColour;
     private boolean colour;
     private boolean gameOver;
@@ -181,6 +182,11 @@ public class Frame extends JFrame{
         opponentsNamePanel.setBounds(50,850,400,100);
         this.add(opponentsNamePanel);
 
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setBounds(775,300,100,30);
+        logoutMouseListener = new LogoutMouseListener();
+        logoutButton.addMouseListener(logoutMouseListener);
+        this.add(logoutButton);
 
 
         largeHorizontalLine1 = new JPanel();
@@ -311,7 +317,7 @@ public class Frame extends JFrame{
         horizontalCrossingLine4.setBackground(Color.black);
         horizontalCrossingLine4.setBounds(650,395,50,10);
         this.add(horizontalCrossingLine4);
-
+        
 
         fields[0][0] = new Feld((byte)1,(byte)1);
         myMouseListener1 = new GameMouseListener(this,fields[0][0]);

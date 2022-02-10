@@ -7,6 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LogoutMouseListener implements MouseListener {
+
+    public LogoutMouseListener() {
+
+    }
     private LogIn_SignIn_Screen logIn_signIn_screen;
     private LoginMouseListener  loginMouseListener;
     private ResultSet resultSet;

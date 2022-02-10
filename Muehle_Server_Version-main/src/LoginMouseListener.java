@@ -28,7 +28,8 @@ public class LoginMouseListener implements MouseListener {
 
         if(logIn_signIn_screen.getUsernameTextField().getText().isEmpty() ||
             logIn_signIn_screen.getPasswordField1().getPassword().length == 0) {
-            logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
+            logIn_signIn_screen.getPasswordNotTheSame().setVisible(true);
+            logIn_signIn_screen.getPasswordNotTheSame().setText("password or username is empty");
             logIn_signIn_screen.repaint();
         }else {
             try {
@@ -39,13 +40,15 @@ public class LoginMouseListener implements MouseListener {
                 preparedStatement2.setString(1, logIn_signIn_screen.getUsernameTextField().getText());
                 preparedStatement2.setString(2, logIn_signIn_screen.getPasswordField1input());
                 ResultSet rs = preparedStatement2.executeQuery();
-                if(itemNo==null){
-                    itemNo="1";
+                if((itemNo==null) && !(logIn_signIn_screen.getUsernameTextField().getText().isEmpty())){
+                    System.out.println("test0");
+                    itemNo="2";
                 }
                     int numberInt = Integer.parseInt(itemNo);
 
                     if (numberInt == 1) {
-                        logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
+                        System.out.println("test");
+                        logIn_signIn_screen.add(logIn_signIn_screen.getPasswordNotTheSame());
                         logIn_signIn_screen.getPasswordNotTheSame().setText("user already signed in.");
                         logIn_signIn_screen.repaint();
                     } else {
@@ -61,8 +64,9 @@ public class LoginMouseListener implements MouseListener {
                             logIn_signIn_screen.getStatement().executeUpdate(sql);
                             PreparedStatement preparedStatement = logIn_signIn_screen.getConnection().prepareStatement(sql);
                             preparedStatement.executeUpdate();
-                        } else {
-                            logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
+                        } else if(!(rs.next())&& numberInt==2 ) {
+                            System.out.println("test2");
+                            logIn_signIn_screen.getPasswordNotTheSame().setVisible(true);
                             logIn_signIn_screen.getPasswordNotTheSame().setText("wrong username and or password.");
                             logIn_signIn_screen.repaint();
                         }
