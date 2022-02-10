@@ -13,47 +13,57 @@ public class RegistrateMouseListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        if(logIn_signIn_screen.GetLoginButton().isVisible()==true) {
-            logIn_signIn_screen.GetLoginButton().setVisible(false);
-            logIn_signIn_screen.getPasswordField2().setVisible(true);
-            logIn_signIn_screen.getPasswordLabel2().setVisible(true);
-            logIn_signIn_screen.NotYetRegistrated().setVisible(false);
-            logIn_signIn_screen.repaint();
-        }else{
-            if((logIn_signIn_screen.checkUsername(logIn_signIn_screen.getUsernameTextField().getText())))
-            {
 
-                if ((logIn_signIn_screen.getPasswordField1input().equals(logIn_signIn_screen.getPasswordField2input()) == true) & (logIn_signIn_screen.getPasswordField1input().isEmpty() == false)) {
+        String query2 = "SELECT Username FROM `registration_table` WHERE Username='" + logIn_signIn_screen.getUsernameTextField().getText() + "'";
+        try {
+            String itemNo = logIn_signIn_screen.viewValue(logIn_signIn_screen.getConnection(), query2);
+            System.out.println(itemNo);
 
 
-                    logIn_signIn_screen.GetLoginButton().setVisible(true);
-                    logIn_signIn_screen.getPasswordField2().setVisible(false);
-                    logIn_signIn_screen.getPasswordLabel2().setVisible(false);
-                    logIn_signIn_screen.NotYetRegistrated().setVisible(true);
-                    //logIn_signIn_screen.getPasswordField2().setText(null);
-                    //logIn_signIn_screen.getPasswordField1().setText(null);
-                    //logIn_signIn_screen.getUsernameTextField().setText(null);
-                    logIn_signIn_screen.repaint();
+            if (logIn_signIn_screen.GetLoginButton().isVisible() == true) {
+                logIn_signIn_screen.GetLoginButton().setVisible(false);
+                logIn_signIn_screen.getPasswordField2().setVisible(true);
+                logIn_signIn_screen.getPasswordLabel2().setVisible(true);
+                logIn_signIn_screen.NotYetRegistrated().setVisible(false);
+                logIn_signIn_screen.repaint();
+            } else {
+                if (itemNo ==null) {
 
-                    try {
-                        System.out.println(logIn_signIn_screen.usernameinput());
-                        String sql = "INSERT INTO registration_table VALUES('" + logIn_signIn_screen.getUsernameTextField().getText() + "','" + logIn_signIn_screen.getPasswordField1input() + "'," + 0 + ")";
+                    if ((logIn_signIn_screen.getPasswordField1input().equals(logIn_signIn_screen.getPasswordField2input()) == true) & (logIn_signIn_screen.getPasswordField1input().isEmpty() == false)) {
 
-                        logIn_signIn_screen.getStatement().executeUpdate(sql);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+
+                        logIn_signIn_screen.GetLoginButton().setVisible(true);
+                        logIn_signIn_screen.getPasswordField2().setVisible(false);
+                        logIn_signIn_screen.getPasswordLabel2().setVisible(false);
+                        logIn_signIn_screen.NotYetRegistrated().setVisible(true);
+
+                        logIn_signIn_screen.repaint();
+
+                        try {
+                            System.out.println(logIn_signIn_screen.usernameinput());
+                            String sql = "INSERT INTO registration_table VALUES('" + logIn_signIn_screen.getUsernameTextField().getText() + "','" + logIn_signIn_screen.getPasswordField1input() + "'," + 0 + ")";
+                            logIn_signIn_screen.getStatement().executeUpdate(sql);
+                            logIn_signIn_screen.getPasswordField2().setText(null);
+                            logIn_signIn_screen.getPasswordField1().setText(null);
+                            logIn_signIn_screen.getUsernameTextField().setText(null);
+                            logIn_signIn_screen.repaint();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    } else {
+                        logIn_signIn_screen.add(logIn_signIn_screen.getPasswordNotTheSame());
+                        logIn_signIn_screen.repaint();
                     }
                 } else {
                     logIn_signIn_screen.add(logIn_signIn_screen.getPasswordNotTheSame());
+                    logIn_signIn_screen.getPasswordNotTheSame().setText("username already given");
                     logIn_signIn_screen.repaint();
                 }
-            }else{
-                logIn_signIn_screen.add(logIn_signIn_screen.getPasswordNotTheSame());
-                logIn_signIn_screen.repaint();
             }
-        }
 
-    }
+    } catch (SQLException throwables) {
+        throwables.printStackTrace();
+    }}
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {

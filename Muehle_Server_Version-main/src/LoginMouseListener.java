@@ -39,28 +39,35 @@ public class LoginMouseListener implements MouseListener {
                 preparedStatement2.setString(1, logIn_signIn_screen.getUsernameTextField().getText());
                 preparedStatement2.setString(2, logIn_signIn_screen.getPasswordField1input());
                 ResultSet rs = preparedStatement2.executeQuery();
-                int numberInt = Integer.parseInt(itemNo);
-                if (numberInt == 1) {
-                    logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
-                    logIn_signIn_screen.repaint();
-                } else {
-
-
-                    if (rs.next()) {
-                        logIn_signIn_screen.logoutButton().setVisible(true);
-                        logIn_signIn_screen.GetLoginButton().setVisible(false);
-                        logIn_signIn_screen.getPasswordField1().setEditable(false);
-                        logIn_signIn_screen.getUsernameTextField().setEditable(false);
-                        logIn_signIn_screen.repaint();
-                        String sql = "update registration_table set signed_in = " + 1 + " WHERE Username='" + logIn_signIn_screen.getUsernameTextField().getText() + "' AND passwort='" + logIn_signIn_screen.getPasswordField1input() + "'";
-                        logIn_signIn_screen.getStatement().executeUpdate(sql);
-                        PreparedStatement preparedStatement = logIn_signIn_screen.getConnection().prepareStatement(sql);
-                        preparedStatement.executeUpdate();
-                    } else {
-                        logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
-                        logIn_signIn_screen.repaint();
-                    }
+                if(itemNo==null){
+                    itemNo="1";
                 }
+                    int numberInt = Integer.parseInt(itemNo);
+
+                    if (numberInt == 1) {
+                        logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
+                        logIn_signIn_screen.getPasswordNotTheSame().setText("user already signed in.");
+                        logIn_signIn_screen.repaint();
+                    } else {
+
+
+                        if (rs.next()) {
+                            logIn_signIn_screen.logoutButton().setVisible(true);
+                            logIn_signIn_screen.GetLoginButton().setVisible(false);
+                            logIn_signIn_screen.getPasswordField1().setEditable(false);
+                            logIn_signIn_screen.getUsernameTextField().setEditable(false);
+                            logIn_signIn_screen.repaint();
+                            String sql = "update registration_table set signed_in = " + 1 + " WHERE Username='" + logIn_signIn_screen.getUsernameTextField().getText() + "' AND passwort='" + logIn_signIn_screen.getPasswordField1input() + "'";
+                            logIn_signIn_screen.getStatement().executeUpdate(sql);
+                            PreparedStatement preparedStatement = logIn_signIn_screen.getConnection().prepareStatement(sql);
+                            preparedStatement.executeUpdate();
+                        } else {
+                            logIn_signIn_screen.add(logIn_signIn_screen.getNameOrPasswordNull());
+                            logIn_signIn_screen.getPasswordNotTheSame().setText("wrong username and or password.");
+                            logIn_signIn_screen.repaint();
+                        }
+                    }
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

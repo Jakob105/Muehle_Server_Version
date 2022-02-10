@@ -189,28 +189,6 @@ public class LogIn_SignIn_Screen extends JFrame{
     }
 
     public JLabel getPasswordNotTheSame() { return passwordNotTheSame; }
-
-    public boolean checkUsername(String Username)
-    {
-        PreparedStatement ps;
-        ResultSet rs;
-        boolean checkUser = false;
-        String query = "SELECT * FROM `registration_table` WHERE `Username` =?";
-
-        try {
-            ps = getConnection().prepareStatement(query);
-            ps.setString(1, Username);
-
-            rs = ps.executeQuery();
-
-            if(rs.next())
-            {
-                checkUser = true;
-            }
-        } catch (SQLException ex) {
-        }
-        return checkUser;
-    }
     public String viewValue(Connection con, String command) throws SQLException
     {
         String value = null;
